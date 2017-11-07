@@ -2,5 +2,6 @@ data
 model.h5
 .vscode
 .ipynb_checkpoints
-test.ipynb
-test2.ipynb
+*.mp4
+run1
+run2
