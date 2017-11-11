@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 import shutil
 
+import cv2 
+
 import numpy as np
 import socketio
 import eventlet
@@ -39,14 +41,13 @@ class SimplePIController:
 
         # integral error
         self.integral += self.error
-
+        self.integral = min(max(-600, self.integral), 600)
         return self.Kp * self.error + self.Ki * self.integral
 
 
-controller = SimplePIController(0.1, 0.002)
-set_speed = 9
+controller = SimplePIController(0.1, 0.007)
+set_speed = 10
 controller.set_desired(set_speed)
-
 
 @sio.on('telemetry')
 def telemetry(sid, data):
@@ -61,11 +62,38 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
+
+        # Convert image into HSV
+        image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2HSV)
+
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
+
+        model_run = 3
+        if model_run == 1:
+            eta = 1
+            if np.abs(steering_angle) < 0.2:
+                controller.set_desired(30)
+            elif np.abs(steering_angle) < 0.5:
+                controller.set_desired(20)
+            elif np.abs(steering_angle) < 0.7:
+                controller.set_desired(15)
+            else:
+                controller.set_desired(10)
+        elif model_run == 2:
+            if np.abs(steering_angle) < 0.2:
+                controller.set_desired(15)
+            elif np.abs(steering_angle) < 0.5:
+                controller.set_desired(12)
+            elif np.abs(steering_angle) < 0.7:
+                controller.set_desired(10)
+            else:
+                controller.set_desired(9)
+        else:
+            controller.set_desired(10)
 
         throttle = controller.update(float(speed))
 
-        print(steering_angle, throttle)
+        print("Steering angle: {:.3f}, Throttle: {:.3f}".format(steering_angle, throttle))
         send_control(steering_angle, throttle)
 
         # save frame
