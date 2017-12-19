@@ -1,4 +1,4 @@
-#**Behavioral Cloning** 
+# **Behavioral Cloning** 
 
 ---
 
@@ -25,9 +25,9 @@ The goals / steps of this project are the following:
 
 ## Rubric Points
 ---
-###Files Submitted & Code Quality
+### Files Submitted & Code Quality
 
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
 * model.ipynb containing the script to create and train the model
@@ -35,18 +35,18 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 
-####2. Submission includes functional code
+#### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```
 python drive.py model.h5
 ```
 
-####3. Submission code is usable and readable
+#### 3. Submission code is usable and readable
 
 The model.ipynb file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
-####1. Training data collecting
+### Model Architecture and Training Strategy
+#### 1. Training data collecting
 
 To capture good driving behavior, I used a joystick to drive the vehicle to collect training data with  smooth steering angle, I also drived the vehicle with higher speed as much as possible in simulator  so that the training data contains data with  higher steering angle, which is useful for higher speed running in autonous mode.
 
@@ -66,10 +66,7 @@ Examples of the collected data on two tracks.
 | :--------------------: | :--------------------: |
 | data example on track1 | data example on track2 |
 
-
-
-
-####2. Training data processing
+#### 2. Training data processing
 The training data is split into train and validation data using 
 ```
 from sklearn.model_selection import train_test_split
@@ -107,7 +104,7 @@ def generator(samples, batch_size=32):
 ```
 
 
-####3. Model architecture 
+#### 3. Model architecture 
 
 My model for track1 consists of a convolution neural network followed with full connected network. I use a convolution neural network model similar to the nvidia model firstly. But this model performs not well at first, in order to increase the model performance, I increased Conv layers and filters number. The model is shown as following
 
@@ -173,7 +170,7 @@ optimizer = Adam(lr=learning_rate)
 model2.compile(loss='mse', optimizer=optimizer)
 ```
 
-####4. Model parameter tuning
+#### 4. Model parameter tuning
 
 The model parameters are tuned as following.  The Adam optimizer is used, the rate is set with default value. 
 
@@ -185,7 +182,7 @@ train_steps = len(train_samples)//batch_size
 validation_steps = len(validation_samples)//batch_size
 ```
 
-####5. Model training
+#### 5. Model training
 
 The model is trained with keras `fit_generator()`.
 
@@ -197,8 +194,9 @@ model.fit_generator(train_generator,
                     epochs=epochs,callbacks=callbacks)
 ```
 
-####6. Training results
+#### 6. Training results
 The training results are shown as following
+
 |   ![alt text][result1]    |   ![alt text][result2]    |
 | :-----------------------: | :-----------------------: |
 | Training result on track1 | Training result on track2 |
