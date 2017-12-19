@@ -2,6 +2,7 @@ data
 model.h5
 .vscode
 .ipynb_checkpoints
-*.mp4
+
 run1
 run2
+run1_t2.mp4
