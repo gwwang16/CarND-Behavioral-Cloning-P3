@@ -68,7 +68,7 @@ def telemetry(sid, data):
 
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
-        model_run = 3
+        model_run = 1
         if model_run == 1:
             eta = 1
             if np.abs(steering_angle) < 0.2:
